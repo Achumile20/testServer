@@ -63,6 +63,40 @@ exports.updateOne = async (req, res)=>{
         res.status(500).send({message:"Could not get the user", err})
     }
 }
+  
+exports.deleteUser = async (req, res ) => {
+    try {
+const id = req.params.id;
+
+const user = await User.findById(id);
+if (User) {
+    return res.status(404).json({ message: 'user not found '});
+
+}
+
+await User.findByIdAndDelete(id);
+
+res.json({ message: 'User deleted successfully' }); 
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Internal server error', err });
+    }
+
+};
+
+exports.deleteAllUsers = async (req, res) => {
+    try {
+
+        await User.deleteMany({});
+
+        req.json({ message: 'All Users deleted successfully '});
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Internal server error', err});
+    }
+};
+
+
 
 exports.allAccess = (req, res) => {
     res.status(200).send("Public Content.");
